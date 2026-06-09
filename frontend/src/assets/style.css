@@ -1,0 +1,59 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --sidebar-width: 260px;
+  --panel-width: 280px;
+  --sidebar-bg: #1a1a2e;
+  --sidebar-hover: #252540;
+  --sidebar-active: #2d2d50;
+  --primary: #7c3aed;
+  --primary-light: #a78bfa;
+  --primary-bg: rgba(124, 58, 237, 0.08);
+  --bg-main: #f8f7fc;
+  --bg-chat: #ffffff;
+  --bg-panel: #f1f0f8;
+  --text-primary: #1e1b4b;
+  --text-secondary: #6b7280;
+  --text-light: #c4b5fd;
+  --text-sidebar: #a5a5c8;
+  --border: #e5e2f0;
+  --msg-user: #7c3aed;
+  --msg-ai: #f5f3ff;
+  --shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  --radius: 12px;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --mode-resume: #7c3aed;
+  --mode-interview: #0891b2;
+  --mode-plan: #ea580c;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+    'Microsoft YaHei', sans-serif;
+  background: var(--bg-main);
+  color: var(--text-primary);
+  height: 100vh;
+  overflow: hidden;
+}
+
+#app {
+  height: 100vh;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d4d0e4;
+  border-radius: 10px;
+}

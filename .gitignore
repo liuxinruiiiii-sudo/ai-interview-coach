@@ -21,3 +21,8 @@ logs/
 
 # Local config (contains secrets)
 application-local.yml
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+*.log
