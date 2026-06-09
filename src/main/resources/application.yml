@@ -4,6 +4,8 @@ server:
 spring:
   application:
     name: ai-job-helper
+  profiles:
+    active: local
 
   datasource:
     url: jdbc:mysql://localhost:3306/ai_job_helper?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&createDatabaseIfNotExist=true
@@ -29,6 +31,6 @@ mybatis-plus:
 
 # DeepSeek API 配置（后续步骤使用）
 deepseek:
-  api-key: your-deepseek-api-key
+  api-key: ${DEEPSEEK_API_KEY:your-api-key}
   base-url: https://api.deepseek.com/v1
   model: deepseek-chat
