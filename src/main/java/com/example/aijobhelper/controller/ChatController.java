@@ -1,5 +1,6 @@
 package com.example.aijobhelper.controller;
 
+import com.example.aijobhelper.model.dto.AskWithFileResponse;
 import com.example.aijobhelper.model.dto.ChatRequest;
 import com.example.aijobhelper.model.dto.ChatResponse;
 import com.example.aijobhelper.model.dto.UploadResult;
@@ -57,5 +58,39 @@ public class ChatController {
         String text = pdfService.extractText(file);
         UploadResult result = new UploadResult(file.getOriginalFilename(), text.length(), text);
         return ApiResult.ok("PDF 解析成功", result);
+    }
+
+    /**
+     * 上传 PDF + 提问 —— 解析 PDF 文本，拼接 Prompt，调用 DeepSeek 获取回复
+     *
+     * <pre>
+     * curl -X POST http://localhost:8080/api/chat/ask-with-file \
+     *   -F "file=@简历.pdf" \
+     *   -F "message=这份简历有哪些亮点？"
+     * </pre>
+     */
+    @PostMapping("/ask-with-file")
+    public ApiResult<AskWithFileResponse> askWithFile(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("message") String message) {
+
+        // 1. 提取 PDF 文本
+        String pdfText = pdfService.extractText(file);
+
+        // 2. 拼接 Prompt
+        String prompt = String.format("""
+                请根据以下 PDF 内容回答用户问题。
+
+                【PDF内容】
+                %s
+
+                【用户问题】
+                %s""", pdfText, message);
+
+        // 3. 调用 DeepSeek
+        String answer = deepSeekService.chat(prompt);
+
+        // 4. 返回
+        return ApiResult.ok(new AskWithFileResponse(answer, pdfText.length()));
     }
 }
