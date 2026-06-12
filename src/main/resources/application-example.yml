@@ -1,0 +1,24 @@
+# ======================================================
+# AI Interview Coach — 本地开发配置模板
+#
+# 使用方法：
+# 1. 复制本文件并重命名为 application-local.yml
+# 2. 填入你自己的 DeepSeek API Key
+# 3. 使用 local profile 启动后端项目
+#
+# 注意：
+# application-local.yml 已加入 .gitignore，不会被提交到 GitHub。
+# 请不要把真实 API Key 提交到公开仓库。
+# ======================================================
+
+server:
+  port: 8080
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+deepseek:
+  api-key: sk-your-deepseek-api-key

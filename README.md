@@ -84,7 +84,7 @@ D:\apache-maven-3.9.4\bin\mvn.cmd spring-boot:run
 
 项目使用 Spring Profile 管理敏感配置：
 
-1. 在 `src/main/resources/` 下创建 `application-local.yml`：
+1. 复制 `src/main/resources/application-example.yml`，并重命名为 `application-local.yml`：
 
 ```yaml
 deepseek:
