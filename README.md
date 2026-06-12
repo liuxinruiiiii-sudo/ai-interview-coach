@@ -16,8 +16,9 @@
 
 - **AI 问答** — 输入问题，DeepSeek 实时回复
 - **PDF 简历分析** — 上传简历 PDF，AI 提取内容并给出面试建议
-- **面试模拟** — AI 化身面试官，模拟真实面试场景
-- **学习计划** — 根据目标岗位生成个性化备考方案
+- **模拟面试** — 选择 Java 基础 / Spring Boot / MySQL / Redis / 项目实战等方向，AI 出题 → 用户回答 → AI 评分反馈，完整闭环
+- **学习计划** — 根据目标岗位生成个性化备考方案（UI 已就绪）
+- **题库** — 265 道精选 Java 面试题，按分类筛选（UI 已就绪）
 
 ## 项目结构
 
@@ -29,25 +30,33 @@ ai-job-helper/
 │   │   └── RestTemplateConfig.java       # RestTemplate Bean
 │   ├── controller/
 │   │   ├── HealthController.java         # GET /api/health
-│   │   └── ChatController.java           # 聊天接口
+│   │   ├── ChatController.java           # 聊天 + PDF 上传接口
+│   │   └── MockInterviewController.java  # 模拟面试接口
 │   ├── service/
 │   │   ├── PdfService.java               # PDFBox 解析 PDF
-│   │   └── DeepSeekService.java          # DeepSeek API 调用
+│   │   ├── DeepSeekService.java          # DeepSeek API 调用（核心）
+│   │   └── MockInterviewService.java     # 面试出题 + 评价（复用 DeepSeekService）
 │   ├── model/
-│   │   ├── dto/                           # 请求/响应 DTO
+│   │   ├── dto/                           # 请求/响应 DTO（9 个）
 │   │   └── vo/ApiResult.java             # 统一返回格式
 │   └── exception/
 │       ├── BusinessException.java         # 业务异常
 │       └── GlobalExceptionHandler.java    # 全局异常处理
 ├── frontend/
 │   └── src/
-│       ├── App.vue                        # 主布局（三栏）
-│       ├── api/chat.js                    # Axios 请求封装
+│       ├── App.vue                        # 主布局 + 页面路由
+│       ├── api/
+│       │   ├── chat.js                    # 聊天 / PDF 接口
+│       │   └── interview.js               # 模拟面试接口
 │       └── components/
-│           ├── Sidebar.vue                # 侧边栏（模式+会话）
-│           ├── ChatWindow.vue             # 聊天窗口
-│           ├── ChatInput.vue              # 输入框+文件上传
-│           └── KnowledgePanel.vue         # 知识库面板
+│           ├── Sidebar.vue                # 侧边栏（导航+会话）
+│           ├── ChatWindow.vue             # 聊天窗口（Markdown 渲染）
+│           ├── ChatInput.vue              # 输入框 + 文件上传
+│           ├── ChatPage.vue               # AI 对话页
+│           ├── MockInterviewPage.vue      # 模拟面试页
+│           ├── StudyRoadmapPage.vue       # 学习路线页
+│           ├── QuestionBankPage.vue       # 题库页
+│           └── KnowledgePanel.vue         # 右侧知识库面板
 ├── pom.xml
 └── README.md
 ```
@@ -84,6 +93,8 @@ deepseek:
 | POST | `/api/chat/message` | 纯文本问答 |
 | POST | `/api/chat/upload` | 上传 PDF 并解析 |
 | POST | `/api/chat/ask-with-file` | 上传 PDF + 提问 |
+| POST | `/api/interview/start` | 模拟面试 — 生成面试题 |
+| POST | `/api/interview/answer` | 模拟面试 — 提交回答并评分 |
 
 ### Postman 测试
 
@@ -108,6 +119,31 @@ file: 简历.pdf
 message: 这份简历有哪些亮点？
 ```
 
+**模拟面试 — 生成题目：**
+
+```http
+POST http://localhost:8080/api/interview/start
+Content-Type: application/json
+
+{
+    "category": "Java 基础",
+    "level": "intermediate"
+}
+```
+
+**模拟面试 — 提交回答：**
+
+```http
+POST http://localhost:8080/api/interview/answer
+Content-Type: application/json
+
+{
+    "question": "请解释 HashMap 的底层实现原理",
+    "userAnswer": "HashMap 底层采用数组+链表+红黑树...",
+    "category": "Java 基础"
+}
+```
+
 ## 前端启动
 
 ```bash
@@ -123,6 +159,8 @@ Vite 开发服务器自动将 `/api` 请求代理到 `http://localhost:8080`。
 ## Git 提交历史
 
 ```
+f2f3826 feat: add DeepSeek-powered mock interview flow
+4767fe9 docs: add project documentation
 b21598c feat: implement vue interview assistant ui
 f00eb34 feat: support pdf question answering
 2e98bd5 feat: 实现 DeepSeek 聊天接口
