@@ -14,11 +14,21 @@
 
 ## 功能
 
-- **AI 问答** — 输入问题，DeepSeek 实时回复
-- **PDF 简历分析** — 上传简历 PDF，AI 提取内容并给出面试建议
-- **模拟面试** — 选择 Java 基础 / Spring Boot / MySQL / Redis / 项目实战等方向，AI 出题 → 用户回答 → AI 评分反馈，完整闭环
-- **学习计划** — 根据目标岗位生成个性化备考方案（UI 已就绪）
-- **题库** — 265 道精选 Java 面试题，按分类筛选（UI 已就绪）
+### 已完成 ✅
+
+- **AI 对话** — 输入问题，DeepSeek API 实时回复，前端 Markdown 渲染
+- **PDF 简历解析** — PDFBox 提取 PDF 文本，支持中文文档
+- **PDF + AI 问答** — 上传简历 PDF → 拼接 Prompt → AI 结合 PDF 内容分析回答
+- **模拟面试** — 选择 Java 基础 / Spring Boot / MySQL / Redis / 项目实战等方向，AI 出题 → 用户回答 → AI 评分反馈（评分 + 亮点 + 不足 + 参考答案 + 追问），完整闭环
+
+### 待开发 🚧
+
+- **学习路线** — 当前为静态 UI，DeepSeek 生成逻辑待接入
+- **题库** — 当前为前端 mock 数据，后端管理待开发
+- **数据库持久化** — 会话数据存储在浏览器内存，刷新后丢失
+- **用户登录 / JWT 认证**
+- **RAG / 向量知识库**
+- **流式输出（SSE）**
 
 ## 项目结构
 
@@ -156,6 +166,15 @@ npm run dev
 
 Vite 开发服务器自动将 `/api` 请求代理到 `http://localhost:8080`。
 
+## 项目亮点（面试视角）
+
+- **前后端分离** — Spring Boot 3 + Vue3，RESTful API 设计
+- **AI 集成** — 封装 RestTemplate 调用 DeepSeek Chat API，统一异常处理
+- **文档解析** — PDFBox 提取 PDF 文本，格式校验 + 空文件检测
+- **Prompt 工程** — 模拟面试的出题 Prompt 和评分 Prompt 写在后端，返回结构稳定
+- **统一返回格式** — `ApiResult<T>` 泛型封装，`GlobalExceptionHandler` 全局异常拦截
+- **组件化前端** — 5 个页面、12 个组件，玻璃拟态紫色 SaaS 风格
+
 ## Git 提交历史
 
 ```
@@ -166,3 +185,14 @@ f00eb34 feat: support pdf question answering
 2e98bd5 feat: 实现 DeepSeek 聊天接口
 2f4dd7f 项目骨架完成
 ```
+
+## 截图
+
+> 启动项目后访问 http://localhost:5173，建议截取以下页面放入 GitHub：
+>
+> 1. **AI 对话页** — 发送消息 + AI 回复（Markdown 渲染效果）
+> 2. **模拟面试页** — 选择方向 → 出题 → 评分反馈
+> 3. **学习路线页** — 6 周手风琴 + 进度条
+> 4. **题库页** — 分类筛选 + 展开 AI 答题指导
+>
+> （截图待补充）
